@@ -1,0 +1,22 @@
+manifestVersion: 1
+id: bisq-daemon
+category: Exchange Server
+name: Bisq Daemon
+version: "1.9.6-arm64"
+tagline: A decentralized bitcoin exchange network
+description: >-
+  Bisq is a safe, private and decentralized way to exchange bitcoin for national currencies and other digital assets. Bisq uses peer-to-peer networking and multi-signature escrow to facilitate trading without a third party. Bisq is non-custodial and incorporates a human arbitration system to resolve disputes.
+  This Umbrel App gives you a headless daemon instance of Bisq that allows a remote client to connect to it.
+releaseNotes: >-
+  Initial Umbrel container for Bisq Daemon
+developer: Bisq
+website: https://bisq.network
+dependencies:
+  - bitcoin
+repo: https://github.com/bisq-network/bisq
+support: https://bisq.community
+port: 6967
+gallery:
+path: ""
+defaultUsername: ""
+defaultPassword: ""

@@ -1,0 +1,36 @@
+version: "3.7"
+
+services:
+  app_proxy:
+    environment:
+      APP_HOST: bisq_daemon_1
+      APP_PORT: $APP_BISQ_DAEMON_GRPC_PORT
+  
+  bisq-daemon:
+    image: nobumaeda/bisq-daemon:v1.9.6-arm64@sha256:522d1b8d6005c20578ea2c234a6def6dea88cae555c96b075dcc1344d49b48b4
+    restart: on-failure
+    ports:
+      - ${APP_BISQ_DAEMON_GRPC_PORT}:6968
+      - ${APP_BISQ_DAEMON_NODE_PORT}:6969
+    command:
+      - /opt/app/java -jar daemon.jar
+      - --apiPassword=${APP_BISQ_DAEMON_API_PASS}
+      - --apiPort=6968
+      - --nodePort=6969
+      - --rpcHost=${APP_BITCOIN_NODE_IP}
+      - --rpcPort=${APP_BITCOIN_RPC_PORT}
+      - --rpcUser=${APP_BITCOIN_RPC_USER}
+      - --rpcPassword=${APP_BITCOIN_RPC_PASS}
+      - --torControlPort=${TOR_PROXY_PORT}
+    volumes:
+      - "${APP_DATA_DIR}/data/bisq-daemon:/data/.bisq-daemon"
+
+  tor:
+    image: getumbrel/tor:0.4.7.8@sha256:2ace83f22501f58857fa9b403009f595137fa2e7986c4fda79d82a8119072b6a
+    user: "1000:1000"
+    restart: on-failure
+    volumes:
+      - ${APP_DATA_DIR}/torrc:/etc/tor/torrc:ro
+      - ${TOR_DATA_DIR}:/data
+    environment:
+      HOME: "/tmp"
